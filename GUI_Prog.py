@@ -41,7 +41,6 @@ def analyse_data():
 
     for record in records[1:]:
         if record != '':
-            print(record)
             typing_speed.append(int(record.split(",")[1]))
             days.append(record.split(",")[0])
             if record.split(",")[3] != '':
