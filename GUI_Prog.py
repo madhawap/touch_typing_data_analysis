@@ -28,17 +28,6 @@ def add_new_data():
     except ValueError:
         waring_msg.config(text="WARNING!! ENTER VALID PRACTICE DATA. All values should be numeric")
 
-    # if '' in data:
-    #     waring_msg.config(text="WARNING!! ENTER VALID PRACTICE DATA")
-    # # if '' not in data and all(isinstance(i, int) or isinstance(i,float) for i in data[1:]):
-    # elif all(isinstance(i, int) or isinstance(i,float) for i in data[1:]):
-    #     with open('touchTypingProgress.csv', 'a', newline='') as f:
-    #         writer = csv.writer(f)
-    #         writer.writerow(data)
-    #     waring_msg.config(text="DATA ADDED")
-    # else:
-    #     waring_msg.config(text="WARNING!! ENTER VALID PRACTICE DATA")
-
 
 def analyse_data():
     records = []
