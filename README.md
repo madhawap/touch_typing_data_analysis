@@ -1,1 +1,5 @@
-# This to keep track on my touch typing progress :)
+# Touch Typing Progress
+
+![img.png](images/img.png)
+
+![img_1.png](images/img_1.png)
