@@ -34,6 +34,7 @@ def analyse_data():
     typing_speed = []
     days = []
     accuracy_list = []
+    time = 0
 
     with open("touchTypingProgress.csv", "r") as file:
         for line in file:
@@ -41,12 +42,14 @@ def analyse_data():
 
     for record in records[1:]:
         if record != '':
+            time += 1
             typing_speed.append(int(record.split(",")[1]))
             days.append(record.split(",")[0])
-            if record.split(",")[3] != '':
+            if record.split(",")[3] != '': # I did not record accuracy at the beginning so there are data without
+                # accuracy
                 accuracy_list.append(float(record.split(",")[3]))
 
-    return sum(accuracy_list) / len(accuracy_list), sum(typing_speed) / len(typing_speed), len(records)
+    return sum(accuracy_list) / len(accuracy_list), sum(typing_speed) / len(typing_speed), time
 
 
 def show_analysis_data():
@@ -54,8 +57,8 @@ def show_analysis_data():
     avg_accuracy = analyse_data()[0]
     avg_wpm = analyse_data()[1]
     time_spent = analyse_data()[2]
-    avg_accuracy_val.config(text=f'{avg_accuracy}')
-    avg_wpm_val.config(text=f'{avg_wpm}')
+    avg_accuracy_val.config(text=f'{avg_accuracy:.4f}')
+    avg_wpm_val.config(text=f'{avg_wpm:.4f}')
     time_spent_val_display.config(text=f'{time_spent} minutes')
 
 
