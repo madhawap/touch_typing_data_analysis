@@ -1,1 +1,1 @@
-# This to keep track of my touch typing progress :)
+# This to keep track on my touch typing progress :)
