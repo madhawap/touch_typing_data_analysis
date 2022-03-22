@@ -3,6 +3,7 @@ from sys import platform
 from tkcalendar import Calendar, DateEntry
 import csv
 import os.path
+
 if platform == "darwin":
     from tkmacosx import Button
 
@@ -10,10 +11,11 @@ FILE_NAME = 'touchTypingProgress.csv'
 
 if not os.path.isfile(FILE_NAME):
     # open(FILE_NAME, 'a').close()
-    header = 'day','speed','attempt','accuracy'
+    header = 'day', 'speed', 'attempt', 'accuracy'
     with open(FILE_NAME, 'a', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(header)
+
 
 def add_new_data():
     """
@@ -47,7 +49,7 @@ def analyse_data():
     days = []
     set_of_days = set()
     accuracy_list = []
-    avg_accuracy, avg_wpm, time_spent, time_spent_per_day = 0,0,0,0
+    avg_accuracy, avg_wpm, time_spent, time_spent_per_day = 0, 0, 0, 0
 
     with open(FILE_NAME, "r") as file:
         for line in file:
@@ -66,9 +68,9 @@ def analyse_data():
     if len(accuracy_list) != 0 and len(typing_speed) != 0:
         avg_accuracy = sum(accuracy_list) / len(accuracy_list)
         avg_wpm = sum(typing_speed) / len(typing_speed)
-        time_spent_per_day = time_spent/len(set_of_days)
+        time_spent_per_day = time_spent / len(set_of_days)
 
-    return avg_accuracy,avg_wpm,time_spent, time_spent_per_day
+    return avg_accuracy, avg_wpm, time_spent, time_spent_per_day
     # return sum(accuracy_list) / len(accuracy_list), sum(typing_speed) / len(typing_speed), time, time/len(set_of_days)
 
 

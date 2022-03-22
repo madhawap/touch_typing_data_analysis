@@ -22,6 +22,6 @@ for record in records[1:]:
 # plt.show()
 
 print(f'Total tests taken \033[95m {len(records)} \033[0m')
-print(f'Total hours spent \033[95m {len(records)/60}h \033[0m')
-print(f'Avg typing speed is \033[95m {sum(typingSpeed)/len(typingSpeed)} \033[0m')
-print(f'Avg accuracy is \033[95m {sum(accuracy)/len(accuracy)} \033[0m')
+print(f'Total hours spent \033[95m {len(records) / 60}h \033[0m')
+print(f'Avg typing speed is \033[95m {sum(typingSpeed) / len(typingSpeed)} \033[0m')
+print(f'Avg accuracy is \033[95m {sum(accuracy) / len(accuracy)} \033[0m')
