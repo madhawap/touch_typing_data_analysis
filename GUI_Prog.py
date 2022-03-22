@@ -163,3 +163,4 @@ root.mainloop()
 
 # TODO: Add progress graphs and display on the GUI (Growth Graph WPM and Accuracy over the time)
 # TODO: Add logo to the GUI
+# TODO: Add fastest of all time
