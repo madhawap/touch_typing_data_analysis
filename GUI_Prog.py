@@ -1,8 +1,10 @@
 from tkinter import *
+from tkinter import ttk
 from sys import platform
 from tkcalendar import Calendar, DateEntry
 import csv
 import os.path
+from winreg import *
 
 if platform == "darwin":
     from tkmacosx import Button
@@ -16,6 +18,16 @@ if not os.path.isfile(FILE_NAME):
         writer = csv.writer(f)
         writer.writerow(header)
 
+# ################ Creates the main window #########################
+root = Tk()
+root.geometry('500x320')
+# root.configure(background='#F0F8FF')
+root.title('My Touch Typing Progress Analyser')
+style = ttk.Style()
+style.configure("BW.TLabel",foreground="black",background="white")
+
+
+# ################ Functionalities #########################
 
 def add_new_data():
     """
@@ -36,7 +48,7 @@ def add_new_data():
             writer.writerow(data)
         waring_msg.config(text="DATA ADDED")
     except ValueError:
-        waring_msg.config(text="WARNING!! ENTER VALID PRACTICE DATA. All values should be numeric")
+        waring_msg.config(text="WARNING!! ENTER VALID PRACTICE DATA.")
 
 
 def analyse_data():
@@ -93,34 +105,42 @@ def show_analysis_data():
     best_wpm_date.config(text=f'{analyse_data()[5]}')
 
 
+def monitor_changes():
+    registry = ConnectRegistry(None, HKEY_CURRENT_USER)
+    key = OpenKey(registry, r'SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize')
+    mode = QueryValueEx(key, "AppsUseLightTheme")
+    root.config(bg="white" if mode[0] else "black")
+    style.configure("BW.TLabel", foreground="black" if mode[0] else "white", background="white" if mode[0] else "black")
+    style.configure("Warning.Label", foreground="red" if mode[0] else "red", background="white" if mode[0] else "black")
+    # label.config(text="Light Mode on" if mode[0] else "Dark Mode on",
+    #              bg="white" if mode[0] else "black",
+    #              fg="black" if mode[0] else "white")
+    root.after(100, monitor_changes)
+
+
+monitor_changes()
+
 # ####################### GUI Design #######################
 
-root = Tk()
-
-# This is the section of code which creates the main window
-root.geometry('500x320')
-# root.configure(background='#F0F8FF')
-root.title('My Touch Typing Progress Analyser')
-
-Label(root, text='Enter Practice Data', font=('arial', 15, 'bold')).place(x=25, y=10)
+ttk.Label(root, text='Enter Practice Data', style="BW.TLabel", font=('arial', 15, 'bold')).place(x=25, y=10)
 
 # Date
-Label(root, text='Date', font=('arial', 12, 'normal')).place(x=38, y=40)
+ttk.Label(root, text='Date', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=38, y=40)
 date_entry = DateEntry(root, width=10, year=2022)
 date_entry.place(x=38, y=65)
 
 # WPM
-Label(root, text='WPM', font=('arial', 12, 'normal')).place(x=170, y=40)
+ttk.Label(root, text='WPM', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=170, y=40)
 wpm_value = Entry(root, width=3, bg='grey')
 wpm_value.place(x=170, y=65)
 
 # Attempt
-Label(root, text='Attempt', font=('arial', 12, 'normal')).place(x=230, y=40)
+ttk.Label(root, text='Attempt', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=230, y=40)
 attempt_count = Entry(root, width=3, bg='grey')
 attempt_count.place(x=230, y=65)
 
 # Accuracy
-Label(root, text='Accuracy', font=('arial', 12, 'normal')).place(x=300, y=41)
+ttk.Label(root, text='Accuracy', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=300, y=41)
 accuracy_value = Entry(root, width=6, bg='grey')
 accuracy_value.place(x=300, y=65)
 
@@ -128,29 +148,29 @@ accuracy_value.place(x=300, y=65)
 add_btn = Button(root, text="Add", command=add_new_data)
 add_btn.place(x=400, y=65)
 
-waring_msg = Label(root, text='', fg='red', font=('arial', 12, 'normal'))
+waring_msg = ttk.Label(root, text='', style="Warning.Label", font=('arial', 12, 'normal'))
 waring_msg.place(x=25, y=100)
 
 # PROGRESS ANALYSIS
-Label(root, text='Progress Analysis', font=('arial', 15, 'bold')).place(x=25, y=130)
+ttk.Label(root, text='Progress Analysis', style="BW.TLabel", font=('arial', 15, 'bold')).place(x=25, y=130)
 show_analysis = Button(root, text="show", command=show_analysis_data)
 if platform == "darwin":
     show_analysis.place(x=180, y=130)
 elif platform == "win32":
     show_analysis.place(x=210, y=130)
 
-Label(root, text='Average Accuracy:', font=('arial', 12, 'normal')).place(x=38, y=170)
+ttk.Label(root, text='Average Accuracy:', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=38, y=170)
 
-Label(root, text='Average WPM:', font=('arial', 12, 'normal')).place(x=38, y=200)
+ttk.Label(root, text='Average WPM:', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=38, y=200)
 
-Label(root, text='Total Time Spent:', font=('arial', 12, 'normal')).place(x=38, y=230)
+ttk.Label(root, text='Total Time Spent:', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=38, y=230)
 
-Label(root, text='Avg Time Per Day:', font=('arial', 12, 'normal')).place(x=38, y=260)
+ttk.Label(root, text='Avg Time Per Day:', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=38, y=260)
 
-avg_accuracy_val = Label(root, text='', font=('arial', 12, 'normal'))
-avg_wpm_val = Label(root, text='', font=('arial', 12, 'normal'))
-time_spent_val_display = Label(root, text='', font=('arial', 12, 'normal'))
-time_spent_per_day_val_display = Label(root, text='', font=('arial', 12, 'normal'))
+avg_accuracy_val = ttk.Label(root, text='', style="BW.TLabel", font=('arial', 12, 'normal'))
+avg_wpm_val = ttk.Label(root, text='', style="BW.TLabel", font=('arial', 12, 'normal'))
+time_spent_val_display = ttk.Label(root, text='', style="BW.TLabel", font=('arial', 12, 'normal'))
+time_spent_per_day_val_display = ttk.Label(root, text='', style="BW.TLabel",  font=('arial', 12, 'normal'))
 
 if platform == "darwin":
     avg_accuracy_val.place(x=160, y=170)
@@ -164,7 +184,7 @@ elif platform == "win32":
     time_spent_per_day_val_display.place(x=180, y=260)
 
 best_wpm_canvas = Canvas(root, width=110, height=148)
-best_wpm_canvas.create_rectangle(0,0,110,148, fill='black', outline='black')
+best_wpm_canvas.create_rectangle(0, 0, 110, 148, fill='black', outline='black')
 best_wpm_canvas.place(x=330, y=138)
 
 Label(root, text='Best WPM', bg='black', fg='white', font=('arial', 12, 'normal')).place(x=345, y=149)
@@ -176,8 +196,6 @@ Label(root, text='on', bg='black', fg='white', font=('arial', 12, 'normal')).pla
 
 best_wpm_date = Label(root, text='00-00-0000', bg='black', fg='white', font=('arial', 12, 'normal'))
 best_wpm_date.place(x=345, y=255)
-
-
 
 root.mainloop()
 
