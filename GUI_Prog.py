@@ -16,10 +16,11 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        # self.root = Tk()
+        # ################ Creates the main window #########################
         self.geometry('510x320')
         self.title('My Touch Typing Progress Analyser')
         self.style = ttk.Style()
+
         # ####################### GUI Design #######################
         ttk.Label(self, text='Enter Practice Data', style="Normal.Label", font=('arial', 15, 'bold')).place(x=25, y=10)
 
@@ -84,13 +85,13 @@ class App(tk.Tk):
             self.best_wpm_canvas.create_rectangle(0, 0, 98, 148, fill='#444444', outline='#444444')
             self.best_wpm_canvas.place(x=330, y=130)
 
-            self.Label(self, text='Best WPM', bg='#444444', fg='white', font=('arial', 14, 'normal')).place(x=345,
+            tk.Label(self, text='Best WPM', bg='#444444', fg='white', font=('arial', 14, 'normal')).place(x=345,
                                                                                                             y=141)
 
             self.best_wpm = tk.Label(self, text='00', bg='#444444', fg='white', font=('arial', 42, 'normal'))
             self.best_wpm.place(x=355, y=161)
 
-            self.Label(self, text='on', bg='#444444', fg='white', font=('arial', 14, 'normal')).place(x=374, y=215)
+            tk.Label(self, text='on', bg='#444444', fg='white', font=('arial', 14, 'normal')).place(x=374, y=215)
 
             self.best_wpm_date = tk.Label(self, text='00-00-0000', bg='#444444', fg='white',
                                           font=('arial', 14, 'normal'))
@@ -246,16 +247,8 @@ class App(tk.Tk):
 
 if __name__ == '__main__':
     FILE_NAME = 'touchTypingProgress.csv'
+
     app = App()
-
-    # ################ Creates the main window #########################
-    # root = Tk()
-    # root.geometry('510x320')
-    # root.title('My Touch Typing Progress Analyser')
-    # style = ttk.Style()
-
     # This will set the GUI styles according the OS selected theme (Only on Windows OS).
     app.change_gui_style()
-    # setup_gui_elements(root)
-
     app.mainloop()
