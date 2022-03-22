@@ -26,6 +26,7 @@ root.geometry('510x320')
 root.title('My Touch Typing Progress Analyser')
 style = ttk.Style()
 
+
 # ################ Functionalities #########################
 
 def add_new_data():
@@ -45,10 +46,13 @@ def add_new_data():
         with open(FILE_NAME, 'a', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(data)
-        waring_msg.config(text="DATA ADDED")
+        waring_msg.place_forget()
+        success_msg.config(text="DATA ADDED SUCCESSFULLY.")
+        success_msg.place(x=25, y=100)
     except ValueError:
+        success_msg.place_forget()
         waring_msg.config(text="WARNING!! ENTER VALID PRACTICE DATA.")
-
+        waring_msg.place(x=25, y=100)
 
 def analyse_data():
     """
@@ -91,7 +95,9 @@ def analyse_data():
 #     attempts_per_day = {i:days.count(i) for i in days}
 
 def show_analysis_data():
-    waring_msg.config(text='')
+    # waring_msg.config(text='')
+    waring_msg.place_forget()
+    success_msg.place_forget()
     avg_accuracy = analyse_data()[0]
     avg_wpm = analyse_data()[1]
     time_spent = analyse_data()[2]
@@ -122,6 +128,7 @@ def monitor_changes():
     elif platform == "darwin":
         style.configure("Normal.Label")
         style.configure("Warning.Label", foreground="red")
+        style.configure("Success.Label", foreground="green")
 
 
 monitor_changes()
@@ -155,7 +162,10 @@ add_btn = Button(root, text="Add", command=add_new_data)
 add_btn.place(x=370, y=65)
 
 waring_msg = ttk.Label(root, text='', style="Warning.Label", font=('arial', 12, 'normal'))
-waring_msg.place(x=25, y=100)
+# waring_msg.place(x=25, y=100)
+
+success_msg = ttk.Label(root, text='', style="Success.Label", font=('arial', 12, 'normal'))
+# success_msg.place(x=25, y=100)
 
 # PROGRESS ANALYSIS
 ttk.Label(root, text='Progress Analysis', style="Normal.Label", font=('arial', 15, 'bold')).place(x=25, y=130)
@@ -219,24 +229,3 @@ root.mainloop()
 
 # TODO: Add progress graphs and display on the GUI (Growth Graph WPM and Accuracy over the time)
 # TODO: Add logo to the GUI
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
