@@ -45,7 +45,7 @@ def analyse_data():
             time += 1
             typing_speed.append(int(record.split(",")[1]))
             days.append(record.split(",")[0])
-            if record.split(",")[3] != '': # I did not record accuracy at the beginning so there are data without
+            if record.split(",")[3] != '':  # I did not record accuracy at the beginning so there are data without
                 # accuracy
                 accuracy_list.append(float(record.split(",")[3]))
 
@@ -61,6 +61,8 @@ def show_analysis_data():
     avg_wpm_val.config(text=f'{avg_wpm:.4f}')
     time_spent_val_display.config(text=f'{time_spent} minutes')
 
+
+# ####################### GUI Design #######################
 
 root = Tk()
 
@@ -101,7 +103,10 @@ waring_msg.place(x=25, y=100)
 # PROGRESS ANALYSIS
 Label(root, text='Progress Analysis', font=('arial', 15, 'bold')).place(x=25, y=130)
 show_analysis = Button(root, text="show", command=show_analysis_data)
-show_analysis.place(x=180, y=130)
+if platform == "darwin":
+    show_analysis.place(x=180, y=130)
+elif platform == "win32":
+    show_analysis.place(x=210, y=130)
 
 Label(root, text='Average Accuracy:', font=('arial', 12, 'normal')).place(x=38, y=170)
 
@@ -110,13 +115,17 @@ Label(root, text='Average WPM:', font=('arial', 12, 'normal')).place(x=38, y=200
 Label(root, text='Total Time Spent:', font=('arial', 12, 'normal')).place(x=38, y=230)
 
 avg_accuracy_val = Label(root, text='', font=('arial', 12, 'normal'))
-avg_accuracy_val.place(x=160, y=170)
-
 avg_wpm_val = Label(root, text='', font=('arial', 12, 'normal'))
-avg_wpm_val.place(x=160, y=200)
-
 time_spent_val_display = Label(root, text='', font=('arial', 12, 'normal'))
-time_spent_val_display.place(x=160, y=230)
+
+if platform == "darwin":
+    avg_accuracy_val.place(x=160, y=170)
+    avg_wpm_val.place(x=160, y=200)
+    time_spent_val_display.place(x=160, y=230)
+elif platform == "win32":
+    avg_accuracy_val.place(x=180, y=170)
+    avg_wpm_val.place(x=180, y=200)
+    time_spent_val_display.place(x=180, y=230)
 
 root.mainloop()
 
