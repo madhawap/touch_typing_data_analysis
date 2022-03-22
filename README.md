@@ -24,7 +24,7 @@ This code is developed to keep track me practicing touch typing. The code is tes
 
 [comment]: <> (![img_windows.png]&#40;images/img_windows.png&#41; )
 
-<img src="./images/img_macos.png" width=533 height=372 alt="macOS GUI">
+<img src="./images/img_macos.png" width=669 height=467 alt="macOS GUI">
 
 <img src="./images/img_windows.png" width=669 height=478 alt="windows GUI">
 
