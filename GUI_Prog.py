@@ -42,14 +42,14 @@ def add_new_data():
 def analyse_data():
     """
     Read the CSV File and Return Calculated data as mentioned below.
-    :return: Avg accurcy, Avg WPM, Total Time, Time Per Day
+    :return: Avg accurcy, Avg WPM, Total Time, Time Per Day, Max WPM, Max WPM Date
     """
     records = []
     typing_speed = []
     days = []
     set_of_days = set()
     accuracy_list = []
-    avg_accuracy, avg_wpm, time_spent, time_spent_per_day = 0, 0, 0, 0
+    avg_accuracy, avg_wpm, time_spent, time_spent_per_day, max_wpm, max_wpm_date = 0, 0, 0, 0, 0, 0
 
     with open(FILE_NAME, "r") as file:
         for line in file:
@@ -68,9 +68,11 @@ def analyse_data():
     if len(accuracy_list) != 0 and len(typing_speed) != 0:
         avg_accuracy = sum(accuracy_list) / len(accuracy_list)
         avg_wpm = sum(typing_speed) / len(typing_speed)
+        max_wpm = max(typing_speed)
+        max_wpm_date = days[typing_speed.index(max_wpm)]
         time_spent_per_day = time_spent / len(set_of_days)
 
-    return avg_accuracy, avg_wpm, time_spent, time_spent_per_day
+    return avg_accuracy, avg_wpm, time_spent, time_spent_per_day, max_wpm, max_wpm_date
     # return sum(accuracy_list) / len(accuracy_list), sum(typing_speed) / len(typing_speed), time, time/len(set_of_days)
 
 
@@ -87,6 +89,8 @@ def show_analysis_data():
     avg_wpm_val.config(text=f'{avg_wpm:.4f}')
     time_spent_val_display.config(text=f'{time_spent} minutes')
     time_spent_per_day_val_display.config(text=f'{time_spent_per_day:.4f} minutes')
+    best_wpm.config(text=f'{analyse_data()[4]}')
+    best_wpm_date.config(text=f'{analyse_data()[5]}')
 
 
 # ####################### GUI Design #######################
@@ -94,7 +98,7 @@ def show_analysis_data():
 root = Tk()
 
 # This is the section of code which creates the main window
-root.geometry('520x320')
+root.geometry('500x320')
 # root.configure(background='#F0F8FF')
 root.title('My Touch Typing Progress Analyser')
 
@@ -158,6 +162,22 @@ elif platform == "win32":
     avg_wpm_val.place(x=180, y=200)
     time_spent_val_display.place(x=180, y=230)
     time_spent_per_day_val_display.place(x=180, y=260)
+
+best_wpm_canvas = Canvas(root, width=110, height=148)
+best_wpm_canvas.create_rectangle(0,0,110,148, fill='black', outline='black')
+best_wpm_canvas.place(x=330, y=138)
+
+Label(root, text='Best WPM', bg='black', fg='white', font=('arial', 12, 'normal')).place(x=345, y=149)
+
+best_wpm = Label(root, text='00', bg='black', fg='white', font=('arial', 40, 'normal'))
+best_wpm.place(x=355, y=173)
+
+Label(root, text='on', bg='black', fg='white', font=('arial', 12, 'normal')).place(x=374, y=227)
+
+best_wpm_date = Label(root, text='00-00-0000', bg='black', fg='white', font=('arial', 12, 'normal'))
+best_wpm_date.place(x=345, y=255)
+
+
 
 root.mainloop()
 
