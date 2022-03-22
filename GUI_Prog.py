@@ -4,10 +4,11 @@ from sys import platform
 from tkcalendar import Calendar, DateEntry
 import csv
 import os.path
-from winreg import *
 
 if platform == "darwin":
     from tkmacosx import Button
+elif platform == "winn32":
+    from winreg import *
 
 FILE_NAME = 'touchTypingProgress.csv'
 
@@ -20,12 +21,10 @@ if not os.path.isfile(FILE_NAME):
 
 # ################ Creates the main window #########################
 root = Tk()
-root.geometry('500x320')
+root.geometry('510x320')
 # root.configure(background='#F0F8FF')
 root.title('My Touch Typing Progress Analyser')
 style = ttk.Style()
-style.configure("BW.TLabel",foreground="black",background="white")
-
 
 # ################ Functionalities #########################
 
@@ -106,23 +105,30 @@ def show_analysis_data():
 
 
 def monitor_changes():
-    registry = ConnectRegistry(None, HKEY_CURRENT_USER)
-    key = OpenKey(registry, r'SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize')
-    mode = QueryValueEx(key, "AppsUseLightTheme")
-    root.config(bg="white" if mode[0] else "black")
-    style.configure("BW.TLabel", foreground="black" if mode[0] else "white", background="white" if mode[0] else "black")
-    style.configure("Warning.Label", foreground="red" if mode[0] else "red", background="white" if mode[0] else "black")
-    # label.config(text="Light Mode on" if mode[0] else "Dark Mode on",
-    #              bg="white" if mode[0] else "black",
-    #              fg="black" if mode[0] else "white")
-    root.after(100, monitor_changes)
+    if platform == "winn32":
+        style.configure("Normal.Label", foreground="black", background="white")
+        registry = ConnectRegistry(None, HKEY_CURRENT_USER)
+        key = OpenKey(registry, r'SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize')
+        mode = QueryValueEx(key, "AppsUseLightTheme")
+        root.config(bg="white" if mode[0] else "black")
+        style.configure("Normal.Label", foreground="black" if mode[0] else "white",
+                        background="white" if mode[0] else "black")
+        style.configure("Warning.Label", foreground="red" if mode[0] else "red",
+                        background="white" if mode[0] else "black")
+        # label.config(text="Light Mode on" if mode[0] else "Dark Mode on",
+        #              bg="white" if mode[0] else "black",
+        #              fg="black" if mode[0] else "white")
+        root.after(100, monitor_changes)
+    elif platform == "darwin":
+        style.configure("Normal.Label")
+        style.configure("Warning.Label", foreground="red")
 
 
 monitor_changes()
 
 # ####################### GUI Design #######################
 
-ttk.Label(root, text='Enter Practice Data', style="BW.TLabel", font=('arial', 15, 'bold')).place(x=25, y=10)
+ttk.Label(root, text='Enter Practice Data', style="Normal.Label", font=('arial', 15, 'bold')).place(x=25, y=10)
 
 # Date
 ttk.Label(root, text='Date', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=38, y=40)
@@ -130,75 +136,107 @@ date_entry = DateEntry(root, width=10, year=2022)
 date_entry.place(x=38, y=65)
 
 # WPM
-ttk.Label(root, text='WPM', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=170, y=40)
+ttk.Label(root, text='WPM', style="Normal.Label", font=('arial', 12, 'normal')).place(x=170, y=40)
 wpm_value = Entry(root, width=3, bg='grey')
 wpm_value.place(x=170, y=65)
 
 # Attempt
-ttk.Label(root, text='Attempt', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=230, y=40)
+ttk.Label(root, text='Attempt', style="Normal.Label", font=('arial', 12, 'normal')).place(x=230, y=40)
 attempt_count = Entry(root, width=3, bg='grey')
 attempt_count.place(x=230, y=65)
 
 # Accuracy
-ttk.Label(root, text='Accuracy', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=300, y=41)
+ttk.Label(root, text='Accuracy', style="Normal.Label", font=('arial', 12, 'normal')).place(x=292, y=41)
 accuracy_value = Entry(root, width=6, bg='grey')
-accuracy_value.place(x=300, y=65)
+accuracy_value.place(x=290, y=65)
 
 # Add Button
 add_btn = Button(root, text="Add", command=add_new_data)
-add_btn.place(x=400, y=65)
+add_btn.place(x=370, y=65)
 
 waring_msg = ttk.Label(root, text='', style="Warning.Label", font=('arial', 12, 'normal'))
 waring_msg.place(x=25, y=100)
 
 # PROGRESS ANALYSIS
-ttk.Label(root, text='Progress Analysis', style="BW.TLabel", font=('arial', 15, 'bold')).place(x=25, y=130)
+ttk.Label(root, text='Progress Analysis', style="Normal.Label", font=('arial', 15, 'bold')).place(x=25, y=130)
 show_analysis = Button(root, text="show", command=show_analysis_data)
 if platform == "darwin":
     show_analysis.place(x=180, y=130)
 elif platform == "win32":
     show_analysis.place(x=210, y=130)
 
-ttk.Label(root, text='Average Accuracy:', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=38, y=170)
+ttk.Label(root, text='Average Accuracy:', style="Normal.Label", font=('arial', 12, 'normal')).place(x=38, y=170)
 
-ttk.Label(root, text='Average WPM:', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=38, y=200)
+ttk.Label(root, text='Average WPM:', style="Normal.Label", font=('arial', 12, 'normal')).place(x=38, y=200)
 
-ttk.Label(root, text='Total Time Spent:', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=38, y=230)
+ttk.Label(root, text='Total Time Spent:', style="Normal.Label", font=('arial', 12, 'normal')).place(x=38, y=230)
 
-ttk.Label(root, text='Avg Time Per Day:', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=38, y=260)
+ttk.Label(root, text='Avg Time Per Day:', style="Normal.Label", font=('arial', 12, 'normal')).place(x=38, y=260)
 
-avg_accuracy_val = ttk.Label(root, text='', style="BW.TLabel", font=('arial', 12, 'normal'))
-avg_wpm_val = ttk.Label(root, text='', style="BW.TLabel", font=('arial', 12, 'normal'))
-time_spent_val_display = ttk.Label(root, text='', style="BW.TLabel", font=('arial', 12, 'normal'))
-time_spent_per_day_val_display = ttk.Label(root, text='', style="BW.TLabel",  font=('arial', 12, 'normal'))
+avg_accuracy_val = ttk.Label(root, text='', style="Normal.Label", font=('arial', 12, 'normal'))
+avg_wpm_val = ttk.Label(root, text='', style="Normal.Label", font=('arial', 12, 'normal'))
+time_spent_val_display = ttk.Label(root, text='', style="Normal.Label", font=('arial', 12, 'normal'))
+time_spent_per_day_val_display = ttk.Label(root, text='', style="Normal.Label", font=('arial', 12, 'normal'))
 
 if platform == "darwin":
     avg_accuracy_val.place(x=160, y=170)
     avg_wpm_val.place(x=160, y=200)
     time_spent_val_display.place(x=160, y=230)
     time_spent_per_day_val_display.place(x=160, y=260)
+    best_wpm_canvas = Canvas(root, width=98, height=148)
+    best_wpm_canvas.create_rectangle(0, 0, 98, 148, fill='#444444', outline='#444444')
+    best_wpm_canvas.place(x=330, y=130)
+
+    Label(root, text='Best WPM', bg='#444444', fg='white', font=('arial', 14, 'normal')).place(x=345, y=141)
+
+    best_wpm = Label(root, text='00', bg='#444444', fg='white', font=('arial', 42, 'normal'))
+    best_wpm.place(x=355, y=161)
+
+    Label(root, text='on', bg='#444444', fg='white', font=('arial', 14, 'normal')).place(x=374, y=215)
+
+    best_wpm_date = Label(root, text='00-00-0000', bg='#444444', fg='white', font=('arial', 14, 'normal'))
+    best_wpm_date.place(x=345, y=246)
 elif platform == "win32":
     avg_accuracy_val.place(x=180, y=170)
     avg_wpm_val.place(x=180, y=200)
     time_spent_val_display.place(x=180, y=230)
     time_spent_per_day_val_display.place(x=180, y=260)
+    best_wpm_canvas = Canvas(root, width=110, height=148)
+    best_wpm_canvas.create_rectangle(0, 0, 110, 148, fill='black', outline='black')
+    best_wpm_canvas.place(x=330, y=138)
 
-best_wpm_canvas = Canvas(root, width=110, height=148)
-best_wpm_canvas.create_rectangle(0, 0, 110, 148, fill='black', outline='black')
-best_wpm_canvas.place(x=330, y=138)
+    Label(root, text='Best WPM', bg='black', fg='white', font=('arial', 12, 'normal')).place(x=345, y=149)
 
-Label(root, text='Best WPM', bg='black', fg='white', font=('arial', 12, 'normal')).place(x=345, y=149)
+    best_wpm = Label(root, text='00', bg='black', fg='white', font=('arial', 40, 'normal'))
+    best_wpm.place(x=355, y=173)
 
-best_wpm = Label(root, text='00', bg='black', fg='white', font=('arial', 40, 'normal'))
-best_wpm.place(x=355, y=173)
+    Label(root, text='on', bg='black', fg='white', font=('arial', 12, 'normal')).place(x=374, y=227)
 
-Label(root, text='on', bg='black', fg='white', font=('arial', 12, 'normal')).place(x=374, y=227)
-
-best_wpm_date = Label(root, text='00-00-0000', bg='black', fg='white', font=('arial', 12, 'normal'))
-best_wpm_date.place(x=345, y=255)
+    best_wpm_date = Label(root, text='00-00-0000', bg='black', fg='white', font=('arial', 12, 'normal'))
+    best_wpm_date.place(x=345, y=255)
 
 root.mainloop()
 
 # TODO: Add progress graphs and display on the GUI (Growth Graph WPM and Accuracy over the time)
 # TODO: Add logo to the GUI
-# TODO: Add fastest of all time
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
