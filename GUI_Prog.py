@@ -30,9 +30,14 @@ def add_new_data():
 
 
 def analyse_data():
+    """
+    Read the CSV File and Return Calculated data as mentioned below.
+    :return: Avg accurcy, Avg WPM, Total Time, Time Per Day
+    """
     records = []
     typing_speed = []
     days = []
+    set_of_days = set()
     accuracy_list = []
     time = 0
 
@@ -45,21 +50,27 @@ def analyse_data():
             time += 1
             typing_speed.append(int(record.split(",")[1]))
             days.append(record.split(",")[0])
+            set_of_days = set(days)
             if record.split(",")[3] != '':  # I did not record accuracy at the beginning so there are data without
                 # accuracy
                 accuracy_list.append(float(record.split(",")[3]))
 
-    return sum(accuracy_list) / len(accuracy_list), sum(typing_speed) / len(typing_speed), time
+    return sum(accuracy_list) / len(accuracy_list), sum(typing_speed) / len(typing_speed), time, time/len(set_of_days)
 
+
+# def cal_attempts_per_day(days):
+#     attempts_per_day = {i:days.count(i) for i in days}
 
 def show_analysis_data():
     waring_msg.config(text='')
     avg_accuracy = analyse_data()[0]
     avg_wpm = analyse_data()[1]
     time_spent = analyse_data()[2]
+    time_spent_per_day = analyse_data()[3]
     avg_accuracy_val.config(text=f'{avg_accuracy:.4f}')
     avg_wpm_val.config(text=f'{avg_wpm:.4f}')
     time_spent_val_display.config(text=f'{time_spent} minutes')
+    time_spent_per_day_val_display.config(text=f'{time_spent_per_day:.4f} minutes')
 
 
 # ####################### GUI Design #######################
@@ -67,7 +78,7 @@ def show_analysis_data():
 root = Tk()
 
 # This is the section of code which creates the main window
-root.geometry('520x300')
+root.geometry('520x320')
 # root.configure(background='#F0F8FF')
 root.title('My Touch Typing Progress Analyser')
 
@@ -114,18 +125,23 @@ Label(root, text='Average WPM:', font=('arial', 12, 'normal')).place(x=38, y=200
 
 Label(root, text='Total Time Spent:', font=('arial', 12, 'normal')).place(x=38, y=230)
 
+Label(root, text='Avg Time Per Day:', font=('arial', 12, 'normal')).place(x=38, y=260)
+
 avg_accuracy_val = Label(root, text='', font=('arial', 12, 'normal'))
 avg_wpm_val = Label(root, text='', font=('arial', 12, 'normal'))
 time_spent_val_display = Label(root, text='', font=('arial', 12, 'normal'))
+time_spent_per_day_val_display = Label(root, text='', font=('arial', 12, 'normal'))
 
 if platform == "darwin":
     avg_accuracy_val.place(x=160, y=170)
     avg_wpm_val.place(x=160, y=200)
     time_spent_val_display.place(x=160, y=230)
+    time_spent_per_day_val_display.place(x=160, y=260)
 elif platform == "win32":
     avg_accuracy_val.place(x=180, y=170)
     avg_wpm_val.place(x=180, y=200)
     time_spent_val_display.place(x=180, y=230)
+    time_spent_per_day_val_display.place(x=180, y=260)
 
 root.mainloop()
 
