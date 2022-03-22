@@ -2,10 +2,18 @@ from tkinter import *
 from sys import platform
 from tkcalendar import Calendar, DateEntry
 import csv
-
+import os.path
 if platform == "darwin":
     from tkmacosx import Button
 
+FILE_NAME = 'touchTypingProgress.csv'
+
+if not os.path.isfile(FILE_NAME):
+    # open(FILE_NAME, 'a').close()
+    header = 'day','speed','attempt','accuracy'
+    with open(FILE_NAME, 'a', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
 
 def add_new_data():
     """
@@ -21,7 +29,7 @@ def add_new_data():
         wpm_value.delete(0, END)
         attempt_count.delete(0, END)
         accuracy_value.delete(0, END)
-        with open('touchTypingProgress.csv', 'a', newline='') as f:
+        with open(FILE_NAME, 'a', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(data)
         waring_msg.config(text="DATA ADDED")
@@ -39,15 +47,15 @@ def analyse_data():
     days = []
     set_of_days = set()
     accuracy_list = []
-    time = 0
+    avg_accuracy, avg_wpm, time_spent, time_spent_per_day = 0,0,0,0
 
-    with open("touchTypingProgress.csv", "r") as file:
+    with open(FILE_NAME, "r") as file:
         for line in file:
             records.append(line.strip())
 
     for record in records[1:]:
         if record != '':
-            time += 1
+            time_spent += 1
             typing_speed.append(int(record.split(",")[1]))
             days.append(record.split(",")[0])
             set_of_days = set(days)
@@ -55,7 +63,13 @@ def analyse_data():
                 # accuracy
                 accuracy_list.append(float(record.split(",")[3]))
 
-    return sum(accuracy_list) / len(accuracy_list), sum(typing_speed) / len(typing_speed), time, time/len(set_of_days)
+    if len(accuracy_list) != 0 and len(typing_speed) != 0:
+        avg_accuracy = sum(accuracy_list) / len(accuracy_list)
+        avg_wpm = sum(typing_speed) / len(typing_speed)
+        time_spent_per_day = time_spent/len(set_of_days)
+
+    return avg_accuracy,avg_wpm,time_spent, time_spent_per_day
+    # return sum(accuracy_list) / len(accuracy_list), sum(typing_speed) / len(typing_speed), time, time/len(set_of_days)
 
 
 # def cal_attempts_per_day(days):
