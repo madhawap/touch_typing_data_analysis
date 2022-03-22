@@ -20,4 +20,9 @@ This code is developed to keep track me practicing touch typing. The code is tes
 5. Click `Show` button to see some basic statistics of your progress.
 
 
-![img.png](images/img.png)
+![img_macos.png](images/img_macos.png)
+
+<img src="./images/img_macos.png" width=600 height=300>
+
+![img_windows.png](images/img_windows.png) 
+

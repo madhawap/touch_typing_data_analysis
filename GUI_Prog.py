@@ -7,7 +7,7 @@ import os.path
 
 if platform == "darwin":
     from tkmacosx import Button
-elif platform == "winn32":
+elif platform == "win32":
     from winreg import *
 
 FILE_NAME = 'touchTypingProgress.csv'
@@ -111,7 +111,7 @@ def show_analysis_data():
 
 
 def monitor_changes():
-    if platform == "winn32":
+    if platform == "win32":
         style.configure("Normal.Label", foreground="black", background="white")
         registry = ConnectRegistry(None, HKEY_CURRENT_USER)
         key = OpenKey(registry, r'SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize')
@@ -138,7 +138,7 @@ monitor_changes()
 ttk.Label(root, text='Enter Practice Data', style="Normal.Label", font=('arial', 15, 'bold')).place(x=25, y=10)
 
 # Date
-ttk.Label(root, text='Date', style="BW.TLabel", font=('arial', 12, 'normal')).place(x=38, y=40)
+ttk.Label(root, text='Date', style="Normal.Label", font=('arial', 12, 'normal')).place(x=38, y=40)
 date_entry = DateEntry(root, width=10, year=2022)
 date_entry.place(x=38, y=65)
 
