@@ -1,13 +1,12 @@
 import tkinter as tk
-# from tkinter import *
 from tkinter import ttk
 from sys import platform
-from tkcalendar import Calendar, DateEntry
+from tkcalendar import DateEntry
 import csv
 import os.path
 
 if platform == "darwin":
-    from tkmacosx import Button
+    from tkmacosx import Button #This is no longer used.
 elif platform == "win32":
     from winreg import *
 
