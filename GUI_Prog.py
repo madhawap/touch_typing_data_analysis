@@ -5,8 +5,13 @@ from tkcalendar import DateEntry
 import csv
 import os.path
 
+from tkinter import *
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
+
 if platform == "darwin":
-    from tkmacosx import Button #This is no longer used.
+    from tkmacosx import Button  # This is no longer used.
 elif platform == "win32":
     from winreg import *
 
@@ -16,7 +21,7 @@ class App(tk.Tk):
         super().__init__()
 
         # ################ Creates the main window #########################
-        self.geometry('510x320')
+        self.geometry('480x820')  # width x height
         self.title('My Touch Typing Progress Analyser')
         self.style = ttk.Style()
 
@@ -75,6 +80,10 @@ class App(tk.Tk):
         self.time_spent_per_day_val_display = ttk.Label(self, text='', style="Normal.Label",
                                                         font=('arial', 12, 'normal'))
 
+        ttk.Label(self, text='Progress Visualization', style="Normal.Label", font=('arial', 15, 'bold')).place(x=25, y=320)
+        self.show_analysis = ttk.Button(self, text="show", command=self.show_analysis_data)
+
+
         if platform == "darwin":
             self.avg_accuracy_val.place(x=160, y=170)
             self.avg_wpm_val.place(x=160, y=200)
@@ -85,7 +94,7 @@ class App(tk.Tk):
             self.best_wpm_canvas.place(x=330, y=130)
 
             tk.Label(self, text='Best WPM', bg='#444444', fg='white', font=('arial', 14, 'normal')).place(x=345,
-                                                                                                            y=141)
+                                                                                                          y=141)
 
             self.best_wpm = tk.Label(self, text='00', bg='#444444', fg='white', font=('arial', 42, 'normal'))
             self.best_wpm.place(x=355, y=161)
@@ -213,6 +222,34 @@ class App(tk.Tk):
         self.best_wpm.config(text=f'{self.analyse_typing_progress_data()[4]}')
         self.best_wpm_date.config(text=f'{self.analyse_typing_progress_data()[5]}')
 
+    def plot_progress_over_time(self):
+        # create the figure that will contain the plot
+        fig = Figure(figsize=(4.2, 4.2), dpi=100)
+
+        # defining axes
+        # ToDo: Extract the necessary values from the CSV and add here accordingly.
+        y = [i for i in range(45,80)]
+        x = [i for i in range(45, 80)]
+
+        # adding the subplot
+        plot1 = fig.add_subplot(111)  # 111 is the subplot grid parameters encoded as a single integer. For example,
+        # "111" means "1x1 grid, first subplot". Alternative for add_subplot(111) is add_subplot(1, 1, 1).
+
+        #  plot the graph
+        plot1.plot(x, y)
+
+        # creating the Tkinter canvas and adding Matplotlib figure ('fig')
+        canvas = FigureCanvasTkAgg(fig, master=self)
+        canvas.draw()
+
+        # placing the canvas on the Tkinter window
+        canvas.get_tk_widget().place(x=38, y=360)
+
+        # If required can create the Matplotlib toolbar and add it also to the GUI using following lines
+        # toolbar = NavigationToolbar2Tk(canvas, self)
+        # toolbar.update()
+        # canvas.get_tk_widget().place(x=, y=)
+
     def change_gui_style(self):
         """
         This functions will change the GUI styles based on the OS system theme selection.
@@ -250,4 +287,5 @@ if __name__ == '__main__':
     app = App()
     # This will set the GUI styles according the OS selected theme (Only on Windows OS).
     app.change_gui_style()
+    app.plot_progress_over_time()
     app.mainloop()
