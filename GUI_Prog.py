@@ -80,9 +80,9 @@ class App(tk.Tk):
         self.time_spent_per_day_val_display = ttk.Label(self, text='', style="Normal.Label",
                                                         font=('arial', 12, 'normal'))
 
-        ttk.Label(self, text='Progress Visualization', style="Normal.Label", font=('arial', 15, 'bold')).place(x=25, y=320)
+        ttk.Label(self, text='Progress Visualization', style="Normal.Label", font=('arial', 15, 'bold')).place(x=25,
+                                                                                                               y=320)
         self.show_analysis = ttk.Button(self, text="show", command=self.show_analysis_data)
-
 
         if platform == "darwin":
             self.avg_accuracy_val.place(x=160, y=170)
@@ -228,7 +228,7 @@ class App(tk.Tk):
 
         # defining axes
         # ToDo: Extract the necessary values from the CSV and add here accordingly.
-        y = [i for i in range(45,80)]
+        y = [i for i in range(45, 80)]
         x = [i for i in range(45, 80)]
 
         # adding the subplot
